@@ -5,7 +5,6 @@ from pathlib import Path
 import tempfile
 from typing import List
 
-# Allow running as a script from the bot/ directory
 if __package__ is None and not hasattr(sys, "frozen"):
 	parent_dir = str(Path(__file__).resolve().parents[1])
 	if parent_dir not in sys.path:
@@ -57,7 +56,6 @@ async def cmd_resume(message: Message) -> None:
 
 @dp.message(F.document)
 async def handle_document(message: Message) -> None:
-	# This handler will run for any document; guide the user accordingly
 	doc = message.document
 	file_name = (doc.file_name or "").lower()
 	if not (file_name.endswith(".pdf") or file_name.endswith(".docx") or file_name.endswith(".txt")):
@@ -75,7 +73,6 @@ async def handle_document(message: Message) -> None:
 			await message.reply(f"Не удалось извлечь текст: {e}", reply_markup=get_main_reply_kb())
 			return
 
-		# Telegram message limits ~4096 chars; send a chunk and attach as file if long
 		preview = text[:3500] + ("\n..." if len(text) > 3500 else "")
 		await message.reply(preview or "Текст не обнаружен.", reply_markup=get_main_reply_kb())
 
@@ -120,3 +117,4 @@ async def main() -> None:
 
 if __name__ == "__main__":
 	asyncio.run(main())
+
